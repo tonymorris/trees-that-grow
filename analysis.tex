@@ -1,0 +1,67 @@
+\begin{frame}[fragile]
+\begin{block}{Analysis}
+This is my opinion of Trees That Grow
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Alternatives}
+We already know that classy lenses (and prisms) work toward resolving this issue
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Alternatives}
+\begin{lstlisting}[style=haskell]
+class HasImage a where
+  image :: Lens a Image
+
+instance HasImage ICE_Image where
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Alternatives}
+This requires creating a new data type:
+\begin{lstlisting}[style=haskell]
+
+data ICE_Image =
+  ICE_Image
+    ICE
+    Image
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{One problem}
+One problem that I found with TTG is that the type-variable bubbles up the data type tree
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{One problem}
+My \lstinline{Propulsion} data type has 18 type-variables
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{One problem}
+I start running out of names at 26
+
+I didn't get to \lstinline{Aircraft}, which itself, not at the top
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Therefore}
+I have come to prefer classy lenses and prisms.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Interesting Note}
+GHC plans to utilise TTG for its syntax tree, to achieve extensibility.
+\end{block}
+\end{frame}
