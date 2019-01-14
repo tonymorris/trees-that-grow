@@ -1,0 +1,148 @@
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+We could have written this
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+\begin{lstlisting}[style=haskell]
+data ICE =
+  ICE
+    AirInduction
+    FuelInduction
+    Ignition
+    ICEType
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+but we came prepared with Trees That (will probably) Grow
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+\begin{lstlisting}[style=haskell]
+type family XICE x
+
+data ICE_ x =
+  ICE_
+    AirInduction
+    FuelInduction
+    Ignition
+    ICEType
+    (XICE x)
+
+type instance XICE () = ()
+type ICE = ICE_ ()
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+pattern-matching becomes a pain:
+\begin{lstlisting}[style=haskell]
+case ice of
+  ICE_ air fuel ign typ () -> 
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+so we write a pattern-synonym:
+\begin{lstlisting}[style=haskell]
+pattern ICE air fuel ign typ <- ICE_ air fuel ign typ _
+  where ICE air fuel ign typ = ICE_ air fuel ign typ ()
+\end{lstlisting}
+\end{block}
+\end{frame}
+ 
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+using the pattern-synonym:
+\begin{lstlisting}[style=haskell]
+case ice of
+  ICE air fuel ign typ -> 
+\end{lstlisting}
+\end{block}
+\end{frame}
+ 
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+We can add an image to \lstinline{data ICE_}
+\begin{lstlisting}[style=haskell]
+type instance XICE Image = Image
+type ICE_Image = ICE Image
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+We can also add fields to sum types:
+\begin{lstlisting}[style=haskell]
+data Either a b =
+  Left a
+  | Right b
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+Either that grows
+\begin{lstlisting}[style=haskell]
+type family XEither x
+
+data Either_ x a b =
+  Left_ a (XEither x)
+  | Right_ b (XEither x)
+
+type instance XEither () = ()
+type Either = Either_ ()
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+and add pattern-synonyms:
+\begin{lstlisting}[style=haskell]
+pattern Left a <- Left_ a _
+  where Left a = Left_ a ()
+
+pattern Right a <- Right_ a _
+  where Right a = Right_ a ()
+\end{lstlisting}
+\end{block}
+\end{frame}
+ 
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+Note that there exists
+\begin{lstlisting}[style=haskell]
+xeither :: Lens (Either_ x a b) (XEither x)
+\end{lstlisting}
+\begin{lstlisting}[style=haskell]
+data Either_ x a b =
+  Left_ a (XEither x)
+  | Right_ b (XEither x)
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{center}
+Trees That Grow extends to:\cite{najd2016trees}
+\begin{itemize}
+\item adding constructors to sums
+\item existential types
+\item GADTs
+\end{itemize}
+\end{center}
+\end{frame}
