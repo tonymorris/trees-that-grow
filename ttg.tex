@@ -129,6 +129,54 @@ data Either_ x a b =
 \end{lstlisting}
 \end{block}
 \end{frame}
+\begin{frame}[fragile]
+
+\begin{block}{Trees That Grow}
+We can add constructors to sum types:
+\begin{lstlisting}[style=haskell]
+data These a b =
+  This a
+  | That b
+  | Both a b
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+Theses that grow
+\begin{lstlisting}[style=haskell]
+type family XThese x
+
+data These_ x a b =
+  This_ a
+  | That_ b
+  | Both_ a b
+  | XThese_ (XThese x)
+
+type instance XThese Void = Void
+type These = These_ Void
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+We could add pattern-synonyms, like before
+\end{block}
+\end{frame}
+ 
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+We could also write the prisms
+\begin{lstlisting}[style=haskell]
+_This   :: Prism (These_ x a b) a
+_That   :: Prism (These_ x a b) b
+_Both   :: Prism (These_ x a b) (a, b)
+_XThese :: Prism (These_ x a b) (XThese x)
+\end{lstlisting}
+\end{block}
+\end{frame}
 
 \begin{frame}[fragile]
 \begin{center}
