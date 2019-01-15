@@ -38,7 +38,7 @@ type ICE = ICE_ ()
 
 \begin{frame}[fragile]
 \begin{block}{Trees That Grow}
-pattern-matching becomes a pain:
+pattern-matching becomes a pain in the undecorated case:
 \begin{lstlisting}[style=haskell]
 case ice of
   ICE_ air fuel ign typ () -> 
@@ -50,8 +50,10 @@ case ice of
 \begin{block}{Trees That Grow}
 so we write a pattern-synonym:
 \begin{lstlisting}[style=haskell]
-pattern ICE air fuel ign typ <- ICE_ air fuel ign typ _
-  where ICE air fuel ign typ = ICE_ air fuel ign typ ()
+pattern ICE air fuel ign typ <-
+          ICE_ air fuel ign typ _
+  where ICE air fuel ign typ =
+          ICE_ air fuel ign typ ()
 \end{lstlisting}
 \end{block}
 \end{frame}
@@ -179,12 +181,10 @@ _XThese :: Prism (These_ x a b) (XThese x)
 \end{frame}
 
 \begin{frame}[fragile]
-\begin{center}
-Trees That Grow extends to:\cite{najd2016trees}
+\begin{block}{Trees That Grow extends to:\cite{najd2016trees}}
 \begin{itemize}
-\item adding constructors to sums
 \item existential types
 \item GADTs
 \end{itemize}
-\end{center}
+\end{block}
 \end{frame}
