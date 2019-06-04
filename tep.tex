@@ -102,14 +102,6 @@ The ``other stuff'' can be said to be \emph{open}. We don't talk about its struc
 
 \begin{frame}[fragile]
 \begin{block}{\lstinline{MonadError}}
-class MonadError where
-% todo
-\end{block}
-\footnote{more correctly named \lstinline{MonadEither}}
-\end{frame}
-
-\begin{frame}[fragile]
-\begin{block}{\lstinline{MonadError}}
 MonadError ``closes off'' the other stuff, allowing us to write functions over it
 \end{block}
 \end{frame}
@@ -117,6 +109,25 @@ MonadError ``closes off'' the other stuff, allowing us to write functions over i
 \begin{frame}[fragile]
 \begin{block}{The dual problem}
 Product types instead of sum types
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{\lstinline{MonadError}}
+-- other stuff is `a`
+class MonadError a f | f -> a where
+  throwError :: a -> f b
+  catchError :: f b -> (a -> f b) -> f b
+\end{block}
+\footnote{more correctly named \lstinline{MonadEither}}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{\lstinline{MonadError with proper names}}
+-- other stuff is `a`
+class MonadEither a f | f -> a where
+  otherConstruct :: a -> f b
+  usingOther :: f b -> (a -> f b) -> f b
 \end{block}
 \end{frame}
 
