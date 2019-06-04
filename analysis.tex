@@ -60,27 +60,75 @@ One problem that I found with TTG is that the type-variable bubbles up the data 
 
 \begin{frame}[fragile]
 \begin{block}{One problem}
-My \lstinline{Propulsion} data type has 18 type-variables
+My \lstinline{Propulsion} data type, relatively low in the data type tree, already had 18 type-variables
 \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
+\begin{center}
+% todo
+\large{18}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]
 \begin{block}{One problem}
-I start running out of names at 26
+I start running out of identifier names at 26
 \\[13pt]
 I didn't get to \lstinline{Aircraft} \tiny{(which is not at the top of the tree)}
 \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
-\begin{block}{Therefore}
+\begin{block}{Modules}
+Another approach to this problem:
+
+backpack, module system for Haskell
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Backpack}
+GHC >= 8.2 allows a user to write a signature file (\lstinline{hsig}), in place
+of a module, deferring choice of implementation.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Backpack e.g.}
+\begin{lstlisting}[style=haskell]
+signature Streengs where
+  data Str
+  instance Eq Str
+  instance Show Str
+
+module Streengs where
+  type Str = [Char]
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Modules}
+This requires you to push some quantifiers out.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Modules}
+e.g. \lstinline{forall s. ST s a} where do we put the \lstinline{s} quantifier so that we access it?
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Nevertheless}
 I have come to prefer classy lenses and prisms.
 \end{block}
 \end{frame}
 
 \begin{frame}[fragile]
 \begin{block}{}
-Are there improvements to be made? Please talk to me after!
+Are there better solutions to this problem? Please talk to me after!
 \end{block}
 \end{frame}
 

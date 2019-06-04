@@ -1,0 +1,259 @@
+\begin{frame}
+\begin{block}{Let's have a look at \ldots}
+The Expression Problem
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Consider}
+\begin{lstlisting}[style=haskell]
+data Either a b =
+  Right b
+  |
+  Left a
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Let's consider it as}
+\begin{lstlisting}[style=haskell]
+data Either a b =
+  Right b
+  |
+  ... some other stuff
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{}
+``\lstinline{Either a b} has exactly one \lstinline{b} or some other stuff''
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Other examples}
+\begin{lstlisting}[style=haskell]
+data These a b =
+  This a
+  |
+  `That b`
+  |
+  Both a b
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Other examples}
+\begin{lstlisting}[style=haskell]
+data Wibble b =
+  Wobble X
+  |
+  Wubble Y
+  |
+  `Wamble b`
+  |
+  ... some other stuff
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{We can then write functions}
+\begin{itemize}
+\item<1-> \lstinline{getB :: b -> f b -> b}
+\item<2-> \lstinline{modB :: (b -> b) -> f b -> f b}
+\item<3-> \lstinline{add10ToB :: f Int -> f Int}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Importantly}
+We want these functions to work on \emph{anything that is exactly one \lstinline{b} or some other stuff}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Another way to look at it}
+We write a \lstinline{render} function that responds to the HTML request with the rendered `b` value, or renders \emph{some other stuff}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Another way to look at it}
+We then add a constructor to our data type, but it is still \lstinline{b} or some other stuff
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Goal}
+We want the \lstinline{render} function to \textbf{keep working unchanged}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{The other stuff}
+The ``other stuff'' can be said to be \emph{open}. We don't talk about its structure. Sometimes we want to do that too.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{\lstinline{MonadError}}
+class MonadError where
+% todo
+\end{block}
+\footnote{more correctly named \lstinline{MonadEither}}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{\lstinline{MonadError}}
+MonadError ``closes off'' the other stuff, allowing us to write functions over it
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{The dual problem}
+Product types instead of sum types
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Consider}
+\begin{lstlisting}[style=haskell]
+data Pair a b =
+  Pair
+    b
+    ... some other stuff
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Another example}
+\begin{lstlisting}[style=haskell]
+data Blob b =
+  Blob
+    X
+    Y
+    b
+    ... some other stuff
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{The other stuff}
+Previously we had data types that were \lstinline{b} \textbf{or} some other stuff
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{The other stuff}
+Now we have data types that are \lstinline{b} \textbf{and} some other stuff
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Similarly, we can write functions}
+\begin{itemize}
+\item<1-> \lstinline{getB :: f b -> b}
+\item<2-> \lstinline{modB :: (b -> b) -> f b -> f b}
+\item<3-> \lstinline{setB :: b -> f b -> f b}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Also similarly}
+We write a \lstinline{render} function that responds to the HTML request by rendering a person's name, age and address
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Also similarly}
+We want the \lstinline{render} function to work on all things that are a name, age, address and \emph{some other stuff}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Goal}
+We want to add fields to the person data type and the \lstinline{render} function \textbf{keeps working unchanged}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Goal}
+and we want to do this with sums and products \textbf{regardless of the level of nesting of the target constructor or field}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Some observations}
+\lstinline{forall X. X + 0 = X}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Some observations}
+\begin{lstlisting}[style=haskell]
+data Void
+data Either a b =
+  Left a | Right b | XEither Void
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Some observations}
+\lstinline{forall X. X * 1 = X}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Some observations}
+\begin{lstlisting}[style=haskell]
+data Unit = Unit
+data Pair a b =
+  Pair a b Unit
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Some observations}
+\begin{lstlisting}[style=haskell]
+data Void
+data Unit = Unit
+data Pair a b =
+  Pair a b Unit | XPair Void
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Some observations}
+\lstinline{forall A B X. (A * X) + (B * X) = (A + B) * X}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Some observations}
+\begin{lstlisting}[style=haskell]
+data EitherAndX a b =
+  Left a X | Right b X
+\end{lstlisting}
+
+\begin{lstlisting}[style=haskell]
+Pair (Either a b) X
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{block}{Trees That Grow}
+Putting this all together, Trees That Grow abstracts out these additional parameters using \emph{type families}
+\end{block}
+\end{frame}
